@@ -31,10 +31,10 @@ module.exports = {
         ],
         exclude: /node_modules/,
       },
-      {
-        test: /\.svg$/,
-        use: 'file-loader',
-      },
+      // {
+      //   test: /\.svg$/,
+      //   use: 'file-loader',
+      // },
     ],
   },
   plugins: [

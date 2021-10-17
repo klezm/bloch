@@ -1,4 +1,4 @@
-Demo: https://attilakun.net/bloch
+Demo: https://klezm.github.io/bloch
 
 # What is this?
 
