@@ -5,10 +5,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   mode: 'production',
   entry: {
-    lib: './src/lib.ts'
+    lib: './src/lib.ts',
   },
   devServer: {
-    contentBase: './dist'
+    contentBase: './dist',
   },
   module: {
     rules: [
@@ -19,17 +19,15 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new CleanWebpackPlugin()
-  ],
+  plugins: [new CleanWebpackPlugin()],
   resolve: {
-    extensions: ['.ts', '.js' ],
+    extensions: ['.ts', '.js'],
   },
   output: {
     library: 'bloch',
     libraryTarget: 'umd',
     filename: '[name].js',
     globalObject: 'this',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
   },
 };

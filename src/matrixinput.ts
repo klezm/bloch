@@ -4,14 +4,13 @@ import { evaluate } from './parser';
 type OnChangeCallback = (matrix: Matrix2x2) => void;
 
 export class MatrixInput {
-
   private onChange: OnChangeCallback;
   private container: HTMLDivElement;
-  private parent: HTMLElement
-  private u00: HTMLInputElement
-  private u01: HTMLInputElement
-  private u10: HTMLInputElement
-  private u11: HTMLInputElement
+  private parent: HTMLElement;
+  private u00: HTMLInputElement;
+  private u01: HTMLInputElement;
+  private u10: HTMLInputElement;
+  private u11: HTMLInputElement;
 
   constructor(p: HTMLElement, callback: OnChangeCallback) {
     this.onChange = callback;
@@ -39,7 +38,7 @@ export class MatrixInput {
     this.u10 = this.container.querySelector('.u10');
     this.u11 = this.container.querySelector('.u11');
 
-    [this.u00, this.u01, this.u10, this.u11].forEach(input => {
+    [this.u00, this.u01, this.u10, this.u11].forEach((input) => {
       input.addEventListener('change', this.onInputChange); // TODO: cleanup
     });
 
@@ -56,16 +55,15 @@ export class MatrixInput {
   getMatrix(): Matrix2x2 | null {
     const matrix = [
       [evaluate(this.u00.value), evaluate(this.u01.value)],
-      [evaluate(this.u10.value), evaluate(this.u11.value)]
+      [evaluate(this.u10.value), evaluate(this.u11.value)],
     ];
 
-    if (matrix.flat().find(item => item === null) === null)
-      return null;
+    if (matrix.flat().find((item) => item === null) === null) return null;
 
     return matrix as Matrix2x2;
   }
 
   private onInputChange = () => {
     this.onChange(this.getMatrix());
-  }
+  };
 }

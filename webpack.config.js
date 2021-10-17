@@ -5,11 +5,11 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    index: './src/index.ts'
+    index: './src/index.ts',
   },
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: './dist'
+    contentBase: './dist',
   },
   module: {
     rules: [
@@ -23,10 +23,10 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: 'src/index.html'
+      template: 'src/index.html',
     }),
   ],
   resolve: {
-    extensions: ['.ts', '.js' ],
-  }
+    extensions: ['.ts', '.js'],
+  },
 };

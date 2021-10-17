@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { createText } from './utils';
 
 export class AxisLabels {
-
   private parent: THREE.Object3D;
   private xLabel: THREE.Mesh;
   private yLabel: THREE.Mesh;

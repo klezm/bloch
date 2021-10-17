@@ -8,26 +8,24 @@ export enum SelectedState {
 }
 
 export class StateSelector extends ButtonSelector<SelectedState> {
-
   constructor(p: HTMLElement, onClick: OnClickCallback) {
-
     super(p, onClick, [
       {
         key: SelectedState.state0,
-        value: '|0>'
+        value: '|0>',
       },
       {
         key: SelectedState.state1,
-        value: '|1>'
+        value: '|1>',
       },
       {
         key: SelectedState.statePlus,
-        value: '|+>'
+        value: '|+>',
       },
       {
         key: SelectedState.stateMinus,
-        value: '|->'
-      }
+        value: '|->',
+      },
     ]);
   }
 }

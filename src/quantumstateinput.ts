@@ -1,4 +1,4 @@
-import { acos, asin, cos, sin } from "mathjs";
+import { acos, asin, cos, sin } from 'mathjs';
 
 type OnChangeCallback = (theta: number, phi: number) => void;
 
@@ -37,7 +37,7 @@ export class QuantumStateInput {
     this.amplitude1 = this.container.querySelector(`[name=${AMPLITUDE1}]`);
     this.phase = this.container.querySelector(`[name=${PHASE}]`);
 
-    [this.amplitude0, this.amplitude1, this.phase].forEach(input => {
+    [this.amplitude0, this.amplitude1, this.phase].forEach((input) => {
       input.addEventListener('change', this.onInputChange); // TODO: cleanup
     });
 
@@ -46,19 +46,19 @@ export class QuantumStateInput {
 
   update(theta: number, phi: number) {
     const precision = 3;
-    this.amplitude0.value = String(cos(theta/2).toFixed(precision));
+    this.amplitude0.value = String(cos(theta / 2).toFixed(precision));
     this.phase.value = 'i' + String(phi.toFixed(precision));
-    this.amplitude1.value = String(sin(theta/2).toFixed(precision));
+    this.amplitude1.value = String(sin(theta / 2).toFixed(precision));
   }
 
   private onInputChange = (event: Event) => {
     const targetName: string = (event.target as HTMLInputElement).name;
 
     let theta;
-    switch(targetName) {
+    switch (targetName) {
       case AMPLITUDE1:
-      theta = asin(parseFloat(this.amplitude1.value)) * 2;
-      break;
+        theta = asin(parseFloat(this.amplitude1.value)) * 2;
+        break;
 
       case AMPLITUDE0:
       default:

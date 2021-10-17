@@ -1,12 +1,22 @@
-import {createArc, createArrow} from './utils';
-import {ArrowHelper, ConeGeometry, Mesh, MeshBasicMaterial, Object3D, Vector3, Line, Vector2, SphereGeometry, MeshPhongMaterial} from 'three';
-import {abs, complex, equal} from 'mathjs';
+import { createArc, createArrow } from './utils';
+import {
+  ArrowHelper,
+  ConeGeometry,
+  Mesh,
+  MeshBasicMaterial,
+  Object3D,
+  Vector3,
+  Line,
+  Vector2,
+  SphereGeometry,
+  MeshPhongMaterial,
+} from 'three';
+import { abs, complex, equal } from 'mathjs';
 
-const COLOR = 0xFF0000;
+const COLOR = 0xff0000;
 
 // Renders the rotation axis and rotation angle of the unitary matrix entered by the user.
-export class RotationAxis
-{
+export class RotationAxis {
   private arc: Line;
   private direction: Vector3;
   private dot: Mesh;
@@ -23,7 +33,7 @@ export class RotationAxis
     this.container.add(this.arrowHelper1);
 
     const dotGeometry = new SphereGeometry(0.03, 10, 10);
-    const dotMaterial = new MeshPhongMaterial({color: 0x44aa88});
+    const dotMaterial = new MeshPhongMaterial({ color: 0x44aa88 });
     this.dot = new Mesh(dotGeometry, dotMaterial);
     this.container.add(this.dot);
     this.container.visible = false;
@@ -42,17 +52,19 @@ export class RotationAxis
   }
 
   setArc(quantumStatePoint: Vector3) {
-    if (!this.direction)
-      return;
+    if (!this.direction) return;
 
     const cosineAngle = quantumStatePoint.dot(this.direction);
 
     const closestPointOnLine = this.direction.clone().multiplyScalar(cosineAngle);
-    const closestPointOnLineCoords: [number, number, number] = [closestPointOnLine.x, closestPointOnLine.y, closestPointOnLine.z];
+    const closestPointOnLineCoords: [number, number, number] = [
+      closestPointOnLine.x,
+      closestPointOnLine.y,
+      closestPointOnLine.z,
+    ];
     this.dot.position.set(...closestPointOnLineCoords);
 
-    if (this.arc)
-      this.container.remove(this.arc);
+    if (this.arc) this.container.remove(this.arc);
 
     const distance = quantumStatePoint.clone().sub(closestPointOnLine).length();
     this.arc = createArc(this.rotationAngle, distance, COLOR);
@@ -62,15 +74,20 @@ export class RotationAxis
     this.arc.lookAt(this.arc.worldToLocal(this.container.localToWorld(this.direction.clone())));
     this.arc.updateWorldMatrix(true, true);
 
-    const localQuantumStatePoint = this.arc.worldToLocal(this.container.localToWorld(quantumStatePoint.clone()));
-    const projectedQuantumStatePoint = new Vector2(localQuantumStatePoint.x, localQuantumStatePoint.y).normalize();
+    const localQuantumStatePoint = this.arc.worldToLocal(
+      this.container.localToWorld(quantumStatePoint.clone())
+    );
+    const projectedQuantumStatePoint = new Vector2(
+      localQuantumStatePoint.x,
+      localQuantumStatePoint.y
+    ).normalize();
     const angle = complex(projectedQuantumStatePoint.x, projectedQuantumStatePoint.y).toPolar().phi;
     this.arc.rotateZ(angle);
 
     // cone at the end of the arc
     {
       const geometry = new ConeGeometry(0.02, 0.06, 16);
-      const material = new MeshBasicMaterial({color: COLOR});
+      const material = new MeshBasicMaterial({ color: COLOR });
       const coneContainer = new Object3D();
       const cone = new Mesh(geometry, material);
       coneContainer.add(cone);

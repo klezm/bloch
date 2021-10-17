@@ -1,23 +1,28 @@
-import {CaptureZone, DragCaptureZone, UserEvent} from './capturezone';
-import {AxisLabels} from './axislabels';
+import { CaptureZone, DragCaptureZone, UserEvent } from './capturezone';
+import { AxisLabels } from './axislabels';
 import * as THREE from 'three';
-import {createSphere, intersectionsToMap, IntersectionMap, createArrow, polarToCaertesian} from './utils';
-import {RotationAxis} from './rotationaxis';
-import {StateVector} from './statevector';
+import {
+  createSphere,
+  intersectionsToMap,
+  IntersectionMap,
+  createArrow,
+  polarToCaertesian,
+} from './utils';
+import { RotationAxis } from './rotationaxis';
+import { StateVector } from './statevector';
 
 export type QuantumStateChangeCallback = (theta: number, phi: number) => void;
 
 export function makeBloch(
   canvas: HTMLCanvasElement,
   quantumStateChangedCallback: QuantumStateChangeCallback
-  ) {
-
+) {
   setCursor(false);
 
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,
-    preserveDrawingBuffer: true // needed for saving the image into file
+    preserveDrawingBuffer: true, // needed for saving the image into file
   });
   const cameraPos = new THREE.Vector3(0, 0, 2);
 
@@ -37,7 +42,7 @@ export function makeBloch(
 
   // light
   {
-    const color = 0xFFFFFF;
+    const color = 0xffffff;
     const intensity = 1;
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(0, 0, 2);
@@ -46,8 +51,8 @@ export function makeBloch(
 
   const object = new THREE.Object3D();
   const textLayer = new THREE.Object3D();
-  object.rotateX(-Math.PI/4);
-  object.rotateZ(-(Math.PI/2 + Math.PI/4));
+  object.rotateX(-Math.PI / 4);
+  object.rotateZ(-(Math.PI / 2 + Math.PI / 4));
   const sphere = createSphere();
   object.add(sphere);
   const color = 0x8698b5;
@@ -67,19 +72,23 @@ export function makeBloch(
     window.localStorage.setItem('bloch-showDragMe', 'false');
     const sphereIntersection = intersects[sphere.uuid];
 
-    if (sphereIntersection) { // mouse is over sphere
+    if (sphereIntersection) {
+      // mouse is over sphere
       const point = sphere.worldToLocal(sphereIntersection.point);
       point.normalize();
       setStateVectorToPoint(point);
-    } else { // mouse is away from sphere
-      const point = object.worldToLocal(new THREE.Vector3(event.x, event.y/aspectRatio, 0)).normalize();
+    } else {
+      // mouse is away from sphere
+      const point = object
+        .worldToLocal(new THREE.Vector3(event.x, event.y / aspectRatio, 0))
+        .normalize();
       setStateVectorToPoint(point);
     }
     _stateVector.setTextVisibility(false);
   });
 
   function setStateVectorToPoint(point: THREE.Vector3) {
-    const { theta, phi } = _stateVector.setStateVectorToPoint(point)
+    const { theta, phi } = _stateVector.setStateVectorToPoint(point);
     rotationAxis.setArc(point);
     quantumStateChangedCallback(theta, phi);
   }
@@ -87,7 +96,7 @@ export function makeBloch(
   _stateVector.onHoverIn(setCursor.bind(null, true));
   _stateVector.onHoverOut(setCursor.bind(null, false));
 
-  const dragCaptureZone = new DragCaptureZone([{uuid: 'background'}]);
+  const dragCaptureZone = new DragCaptureZone([{ uuid: 'background' }]);
   dragCaptureZone.onDrag((event: UserEvent) => {
     const sensitivity = 0.01;
     rotate(event.deltaY * sensitivity, 0, event.deltaX * sensitivity);
@@ -114,30 +123,31 @@ export function makeBloch(
   }
 
   return {
-
     render() {
       axisLabels.align();
 
       {
         while (events.length) {
-
           const event = events.shift();
           raycaster.setFromCamera(event, camera);
-          const intersects: IntersectionMap = intersectionsToMap(raycaster.intersectObjects(scene.children, true));
-          const activeZone: CaptureZone = captureZones.find(zone => zone.isActive());
-          const captureZonesMinusActive: CaptureZone[] = captureZones.filter(zone => zone !== activeZone);
+          const intersects: IntersectionMap = intersectionsToMap(
+            raycaster.intersectObjects(scene.children, true)
+          );
+          const activeZone: CaptureZone = captureZones.find((zone) => zone.isActive());
+          const captureZonesMinusActive: CaptureZone[] = captureZones.filter(
+            (zone) => zone !== activeZone
+          );
 
           if (activeZone) {
             activeZone.process(event, intersects);
 
-            if (activeZone.isActive())
-              continue;
+            if (activeZone.isActive()) continue;
           }
 
           for (let i = 0; i < captureZonesMinusActive.length; i++) {
             const captureZone = captureZonesMinusActive[i];
 
-            captureZone.process(event, intersects)
+            captureZone.process(event, intersects);
             if (captureZone.isActive()) {
               break;
             }
@@ -169,15 +179,15 @@ export function makeBloch(
     },
 
     onMouseDown(x: number, y: number) {
-      events.push({type: 'mousedown', x, y});
+      events.push({ type: 'mousedown', x, y });
     },
 
     onMouseUp(x: number, y: number) {
-      events.push({type: 'mouseup', x, y});
+      events.push({ type: 'mouseup', x, y });
     },
 
     onMouseMove(x: number, y: number, deltaX: number, deltaY: number) {
-      events.push({type: 'mousemove', x, y, deltaX, deltaY});
-    }
+      events.push({ type: 'mousemove', x, y, deltaX, deltaY });
+    },
   };
 }
