@@ -15,8 +15,9 @@ jobs:
 
       - name: Install and Build 🔧
         run: |
-          npm install
+          npm i -g npm-check-updates
           ncu
+          npm install
           npm run build-gh-pages
 
       - name: Deploy 🚀
