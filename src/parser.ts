@@ -155,6 +155,7 @@ Calc.prototype.eval = function (x) {
       switch (token[1]) {
         /* BASIC ARITHMETIC OPERATORS */
         case '*':
+          // console.log('multiply:  ', args[0], args[1], ' \t token:  ', token, ' \t args:  ', args);
           stack.push(multiply(args[0], args[1]));
           break;
         case '/':
@@ -253,11 +254,24 @@ Calc.prototype.latexToInfix = function (latex) {
     .replace(/(\\left\(|{)/g, '(') // open parenthesis
     .replace(/(\\right\)|})/g, ')') // close parenthesis
     .replace(/[^\(](floor|ceil|sqrt|(sin|cos|tan|sec|csc|cot)h?)\(([^\(\)]+)\)[^\)]/g, '($&)') // functions
-    .replace(/([^(floor|ceil|sqrt|(sin|cos|tan|sec|csc|cot)h?|\+|\-|\*|\/|\^)])\(/g, '$1*(')
+
+    // .replace(/([^(floor|ceil|sqrt|(sin|cos|tan|sec|csc|cot)h?|\+|\-|\*|\/|\^)])\(/g, '$1*(')
+    // .replace(/([^(floor|ceil|sqrt|(sin|cos|tan|sec|csc|cot)h?|\+|\-|\*|\/|\^)])(?! *)\(/g, '$1*(') // adds a multiplication "*" in front of "(" IF
+    .replace(
+      /([^(floor|ceil|sqrt|(sin|cos|tan|sec|csc|cot)h?|\+|\-|\*|\/|\^)])\((?![+\-](?:\d|(?:i(?![a-zA-Z]))))/g,
+      '$1*('
+    ) // adds a multiplication "*" in front of "(" IF no "+/-[DIGIT]" or "+/-i[NO LETTER]" follows
+
     .replace(/\)([\w])/g, ')*$1')
     .replace(/([0-9])([A-Za-z])/g, '$1*$2')
     .replace(/(i)([0-9])/g, '$1*$2')
-    .replace(/(^|[^a-zA-Z0-9\^])([\+-])([a-zA-Z0-9(])/g, '$10$2$3'); // standalone - or + signs are prefixed with 0 so the operator will always have 2 arguments
+
+    .replace(/((?<=[+\-\*] ?)-[0-9i\.]+)/g, '($1)') // puts brackets around negative numbers
+
+    // .replace(/(^|[^a-zA-Z0-9\^])((?<!\()[\+-])([a-zA-Z0-9(])/g, '$10$2$3'); // standalone - or + signs are prefixed with 0 so the operator will always have 2 arguments UNLESS the minus sign comes right after a opening bracket
+    .replace(/(?<=^|[^a-zA-Z0-9\^])([\+-])([a-zA-Z0-9(])/g, '0$1$2'); // standalone - or + signs are prefixed with 0 so the operator will always have 2 arguments
+  // .replace(/(^|[^a-zA-Z0-9\^])([\+-])([a-zA-Z0-9(])/g, '$10$2$3'); // standalone - or + signs are prefixed with 0 so the operator will always have 2 arguments
+  // console.log(latex, '\t|||\t', infix);
 
   return infix;
 };

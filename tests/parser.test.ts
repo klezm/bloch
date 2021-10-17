@@ -194,3 +194,29 @@ describe('latex parser', function () {
     });
   });
 });
+
+describe('latex parser focus on i', function () {
+  [
+    { expr: 'i', expectation: complex(0, 1) },
+
+    { expr: 'i * -1', expectation: complex(0, -1) },
+    { expr: 'i * (-1)', expectation: complex(0, -1) },
+    { expr: '-i * 1', expectation: complex(0, -1) },
+    { expr: '(-i) * 1', expectation: complex(0, -1) },
+    { expr: '1 * -i', expectation: complex(0, -1) },
+    { expr: '1 * (-i)', expectation: complex(0, -1) },
+    { expr: '-1 * i', expectation: complex(0, -1) },
+
+    { expr: '-1 * i', expectation: complex(0, -1) },
+
+    { expr: '-i * -1', expectation: complex(0, 1) },
+    { expr: '-1 * -i', expectation: complex(0, 1) },
+    { expr: 'i * 1', expectation: complex(0, 1) },
+    { expr: '1 * i', expectation: complex(0, 1) },
+  ].forEach((testCase) => {
+    it(`evaluates expression with i: ${testCase.expr}`, function () {
+      // console.log('expr: ', evaluate(testCase.expr), ' \t expect: ', testCase.expectation);
+      expect(evaluate(testCase.expr)).toEqualComplex(testCase.expectation);
+    });
+  });
+});

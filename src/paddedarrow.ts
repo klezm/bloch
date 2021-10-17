@@ -1,12 +1,20 @@
 import { acos, atan2, pi } from 'mathjs';
 import { ArrowHelper, Mesh, MeshBasicMaterial, Object3D, SphereGeometry, Vector3 } from 'three';
-import { createArrow } from './utils';
+import { createArrow, createVec } from './utils';
 
 const SPHERE_RADIUS = 0.2;
 
-function createInvisibleCone(x: number, y: number, z: number): Object3D {
-  const geometry = new SphereGeometry(SPHERE_RADIUS, 10, 10);
-  const material = new MeshBasicMaterial({ visible: false });
+function createCone(
+  x: number,
+  y: number,
+  z: number,
+  visible: boolean = false,
+  rad: number = SPHERE_RADIUS,
+  segments: number = 10,
+  hex: number = 0xffff00
+): Object3D {
+  const geometry = new SphereGeometry(rad, segments, segments);
+  const material = new MeshBasicMaterial({ visible: visible, color: hex });
   const coneContainer = new Object3D();
   const cone = new Mesh(geometry, material);
   coneContainer.add(cone);
@@ -16,16 +24,26 @@ function createInvisibleCone(x: number, y: number, z: number): Object3D {
 // Arrow that has a larger, invisible region sorrounding its tip to make it easier for the user to click.
 export class PaddedArrow {
   private container: Object3D;
-  private visibleArrow: ArrowHelper;
+  // private visibleArrow: ArrowHelper;
+  private visibleArrow;
+  private visibleCone;
   private invisibleCone: Object3D;
 
   constructor() {
     this.container = new Object3D();
-    this.visibleArrow = createArrow(1, 0, 0);
-    this.invisibleCone = createInvisibleCone(1, 0, 0);
+    // this.visibleArrow = createArrow(1, 0, 0);
+    this.visibleArrow = createVec(1, 0, 0);
+
+    this.visibleCone = createCone(1, 0, 0, true, 0.05, 20);
+    this.visibleCone.rotateZ(-pi / 2);
+    this.visibleCone.position.set(1.1 - SPHERE_RADIUS / 2, 0, 0);
+
+    this.invisibleCone = createCone(1, 0, 0);
     this.invisibleCone.rotateZ(-pi / 2);
     this.invisibleCone.position.set(1 - SPHERE_RADIUS / 2, 0, 0);
-    this.container.add(this.visibleArrow, this.invisibleCone);
+    this.container.add(this.visibleArrow, this.visibleCone, this.invisibleCone);
+    // this.container.add(...this.visibleArrow);
+    // this.container.add(this.invisibleCone);
   }
 
   setDirection(dir: Vector3) {

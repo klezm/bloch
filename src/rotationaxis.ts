@@ -1,4 +1,4 @@
-import { createArc, createArrow } from './utils';
+import { createArc, createArrow, createVec } from './utils';
 import {
   ArrowHelper,
   ConeGeometry,
@@ -21,15 +21,19 @@ export class RotationAxis {
   private direction: Vector3;
   private dot: Mesh;
   private container: Object3D;
-  private arrowHelper0: ArrowHelper;
-  private arrowHelper1: ArrowHelper;
+  // private arrowHelper0: ArrowHelper;
+  // private arrowHelper1: ArrowHelper;
+  private arrowHelper0;
+  private arrowHelper1;
   private rotationAngle: number;
 
   constructor() {
     this.container = new Object3D();
     this.arrowHelper0 = createArrow(1, 0, 0, COLOR);
+    // this.arrowHelper0 = createVec(1, 0, 0, COLOR);
     this.container.add(this.arrowHelper0);
     this.arrowHelper1 = createArrow(-1, 0, 0, COLOR);
+    // this.arrowHelper1 = createVec(-1, 0, 0, COLOR);
     this.container.add(this.arrowHelper1);
 
     const dotGeometry = new SphereGeometry(0.03, 10, 10);

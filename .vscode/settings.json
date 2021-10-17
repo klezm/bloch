@@ -1,5 +1,6 @@
 {
-  "cSpell.words": [
-    "raycaster"
-  ]
+  "cSpell.words": ["raycaster"],
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

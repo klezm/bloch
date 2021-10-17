@@ -1,24 +1,32 @@
 import {
   ArrowHelper,
   BufferGeometry,
+  CatmullRomCurve3,
+  CubicBezierCurve,
+  CubicBezierCurve3,
+  CurvePath,
+  CylinderGeometry,
   DoubleSide,
   EllipseCurve,
   Intersection,
   Line,
   LineBasicMaterial,
+  LineCurve3,
   Mesh,
   MeshBasicMaterial,
   MeshPhongMaterial,
   Object3D,
   PlaneGeometry,
+  QuadraticBezierCurve3,
   SphereGeometry,
   Texture,
+  TubeGeometry,
   Vector3,
 } from 'three';
 import { cos, equal, sin } from 'mathjs';
 
 type Map<T> = { [key: string]: T };
-export type IntersectionMap = Map<Intersection>;
+export type IntersectionMap = Map<Intersection<Object3D>>;
 export type UUIDMap = Map<true>;
 
 function toMap<T, V>(list: T[], keyExtractor: (item: T) => string, valueExtractor: (item: T) => V) {
@@ -37,7 +45,7 @@ export function objectsToMap(objects: { uuid: string }[]): UUIDMap {
   );
 }
 
-export function intersectionsToMap(intersections: Intersection[]) {
+export function intersectionsToMap(intersections: Intersection<Object3D>[]) {
   return toMap(
     intersections,
     (intersection) => intersection.object.uuid,
@@ -61,14 +69,58 @@ export function createArrow(x: number, y: number, z: number, hex: number = 0xfff
   dir.normalize();
   const origin = new Vector3(0, 0, 0);
   const length = 1;
-  return new ArrowHelper(dir, origin, length, hex);
+  return new ArrowHelper(dir, origin, length, hex, 0.1, 0.06);
+}
+
+/**
+ * Creates a vector with higher thickness than arrows in three.js
+ *
+ * @param x
+ * @param y
+ * @param z
+ * @param hex
+ * @returns
+ */
+export function createVec(
+  x: number,
+  y: number,
+  z: number,
+  hex: number = 0xffff00
+  // with_ball: boolean = false
+) {
+  const origin = new Vector3(0, 0, 0);
+  const dir = new Vector3(x, y, z);
+  dir.normalize();
+  const length = 1;
+  // const path = new CatmullRomCurve3([origin, dir]);
+  // // const path = new CubicBezierCurve3(origin, origin, origin, dir);
+  // const path = new QuadraticBezierCurve3(origin, origin, dir);
+  const path = new LineCurve3(origin, dir);
+  const geometry = new TubeGeometry(path, 20, 0.01, 8, true);
+  const material = new MeshBasicMaterial({ color: hex });
+  const vector = new Mesh(geometry, material);
+
+  // if (with_ball) {
+  //   const dot = new SphereGeometry(0.05, 16, 12);
+  //   const sphereMaterial = new MeshBasicMaterial({ color: hex });
+  //   const ball = new Mesh(dot, sphereMaterial);
+
+  //   return [vector, ball];}
+  return new Mesh(geometry, material);
 }
 
 export function createSphere(): Mesh {
   const geometry = new SphereGeometry(1, 40, 40);
-  const material = new MeshPhongMaterial({ color: 0x44aa88 });
-  material.transparent = true;
-  material.opacity = 0.1;
+  const material = new MeshBasicMaterial({
+    color: 0x44aa88,
+    transparent: true,
+    opacity: 0.25,
+  });
+  // const material = new MeshPhongMaterial({
+  //   color: 0x44aa88,
+  //   transparent: true,
+  //   opacity: 0.1,
+  // });
   return new Mesh(geometry, material);
 }
 
@@ -121,9 +173,44 @@ export function createText(
   texture.needsUpdate = true;
 
   const geometry = new PlaneGeometry(options.width, options.height, 1);
-  const material = new MeshBasicMaterial({ color: 0xffffff, side: DoubleSide, transparent: true });
+  const material = new MeshBasicMaterial({
+    color: 0xffffff,
+    side: DoubleSide,
+    transparent: true,
+  });
   const plane = new Mesh(geometry, material);
   plane.renderOrder = options.renderOrder ?? 0;
   material.map = texture;
   return plane;
+}
+
+/**
+ * Creates a ket "|val>" to be displayed with mathjax.
+ * @param val
+ * @param dollars
+ * @returns
+ */
+export function ketStr(val: any, dollars: boolean = true) {
+  val = '\\left | ' + String(val) + ' \\right \\rangle';
+  if (dollars) {
+    val = '$$' + val + '$$';
+  }
+  return val;
+}
+
+/**
+ * equivalen to numpy.linSpace
+ * @param startValue
+ * @param stopValue
+ * @param cardinality
+ * @returns
+ */
+export function linSpace(startValue, stopValue, cardinality) {
+  // copied from https://stackoverflow.com/a/40475362/9058671
+  var arr = [];
+  var step = (stopValue - startValue) / (cardinality - 1);
+  for (var i = 0; i < cardinality; i++) {
+    arr.push(startValue + step * i);
+  }
+  return arr;
 }

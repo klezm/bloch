@@ -7,9 +7,12 @@ import {
   IntersectionMap,
   createArrow,
   polarToCaertesian,
+  linSpace,
 } from './utils';
 import { RotationAxis } from './rotationaxis';
 import { StateVector } from './statevector';
+import { buildCircles } from './trace';
+import { pi } from 'mathjs';
 
 export type QuantumStateChangeCallback = (theta: number, phi: number) => void;
 
@@ -55,6 +58,11 @@ export function makeBloch(
   object.rotateZ(-(Math.PI / 2 + Math.PI / 4));
   const sphere = createSphere();
   object.add(sphere);
+
+  // add dashed lines on the sphere
+  const circles = buildCircles();
+  object.add(circles);
+
   const color = 0x8698b5;
   object.add(createArrow(1, 0, 0, color));
   object.add(createArrow(0, 1, 0, color));
@@ -118,18 +126,38 @@ export function makeBloch(
     object.rotation.z += z;
   }
 
+  async function animateGroup(inverse, group, axis) {
+    // copied from https://github.com/Rekhyt2901/AlexGames/blob/master/RubiksCube/RubiksCube.js
+    const speed = 25;
+    // let angleStep = pi / 40;
+    for (let l = 0; l < speed; l++) {
+      let angleStep = pi / 2 / speed;
+      if (inverse) angleStep *= -1;
+      if (axis === 'x') group.rotation.x += angleStep;
+      if (axis === 'y') group.rotation.y += angleStep;
+      if (axis === 'z') group.rotation.z += angleStep;
+      // if (speed === 1) await delay(10); //whyever I need this?
+      // await delay(10);
+      await new Promise((res) => setTimeout(res, 10));
+      // setTimeout(() => {console.log('hello')}, 10);
+    }
+    return true;
+  }
+
   function setCursor(state: boolean) {
     canvas.style.cursor = state ? 'grab' : 'all-scroll';
   }
 
   return {
     render() {
-      axisLabels.align();
+      axisLabels.align(true);
 
       {
         while (events.length) {
           const event = events.shift();
           raycaster.setFromCamera(event, camera);
+          // console.log('cam event', event);
+          // console.log('cam event', camera);
           const intersects: IntersectionMap = intersectionsToMap(
             raycaster.intersectObjects(scene.children, true)
           );
@@ -179,15 +207,43 @@ export function makeBloch(
     },
 
     onMouseDown(x: number, y: number) {
+      // console.log('mousedown', x, y);
       events.push({ type: 'mousedown', x, y });
     },
 
     onMouseUp(x: number, y: number) {
+      // console.log('mouseup', x, y);
       events.push({ type: 'mouseup', x, y });
     },
 
     onMouseMove(x: number, y: number, deltaX: number, deltaY: number) {
       events.push({ type: 'mousemove', x, y, deltaX, deltaY });
+    },
+
+    /**
+     * sets the rotation of the sphere with an animation between current view and target
+     * @param x
+     * @param y
+     * @param z
+     * @param update
+     */
+    async setRotation(x: number, y: number, z: number, update?: boolean) {
+      const len = 100;
+      const xRange = linSpace(object.rotation.x, x, len);
+      const yRange = linSpace(object.rotation.y, y, len);
+      const zRange = linSpace(object.rotation.z, z, len);
+      for (let i = 0; i < len; i++) {
+        if (update) {
+          object.rotation.x += xRange[i];
+          object.rotation.y += yRange[i];
+          object.rotation.z += zRange[i];
+        } else {
+          object.rotation.x = xRange[i];
+          object.rotation.y = yRange[i];
+          object.rotation.z = zRange[i];
+        }
+        await new Promise((res) => setTimeout(res, 10));
+      }
     },
   };
 }

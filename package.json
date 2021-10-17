@@ -6,27 +6,47 @@
   "scripts": {
     "test": "jest",
     "coverage": "jest --coverage",
-    "build": "webpack --config webpack.prod.config.js",
-    "start": "webpack serve"
+    "build": "webpack --config webpack.prod.config.js --mode production",
+    "build-gh-pages": "webpack --config webpack.prod2.config.js --mode production",
+    "build-dev": "webpack --mode development",
+    "build-prod": "webpack --mode production",
+    "buildDev": "webpack --mode development",
+    "buildProd": "webpack --mode production",
+    "buildAuto": "webpack",
+    "clean": "rm dist/bundle.js",
+    "serveBuild": "webpack serve --static 'dist/lib.js'",
+    "start": "webpack serve",
+    "http": "http-server dist/"
   },
   "author": "",
   "license": "ISC",
   "main": "dist/lib.js",
   "devDependencies": {
-    "@types/jest": "^26.0.16",
-    "clean-webpack-plugin": "^3.0.0",
-    "html-webpack-plugin": "^4.5.0",
-    "jest": "^26.6.3",
-    "ts-jest": "^26.4.4",
-    "ts-loader": "^8.0.11",
-    "typescript": "^4.1.2",
-    "webpack": "^5.8.0",
-    "webpack-cli": "^4.2.0",
-    "webpack-dev-server": "^3.11.0"
+    "@types/jest": "^27.0.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^9.0.1",
+    "css-loader": "^6.4.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.4.0",
+    "http-server": "^13.0.2",
+    "jest": "^27.2.5",
+    "npm-check-updates": "^11.8.5",
+    "sass": "^1.43.2",
+    "sass-loader": "^12.2.0",
+    "style-loader": "^3.3.0",
+    "ts-jest": "^27.0.7",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.4.4",
+    "webpack": "^5.58.2",
+    "webpack-cli": "^4.9.0",
+    "webpack-dev-server": "^4.3.1"
   },
   "dependencies": {
-    "@types/mathjs": "^6.0.8",
-    "mathjs": "^8.1.0",
-    "three": "^0.123.0"
+    "@types/mathjs": "^9.4.1",
+    "@types/three": "^0.133.1",
+    "mathjax": "^3.2.0",
+    "mathjax-full": "^3.2.0",
+    "mathjs": "^9.5.1",
+    "three": "^0.133.1"
   }
 }

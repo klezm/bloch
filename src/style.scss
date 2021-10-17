@@ -1,0 +1,135 @@
+// sass tutorial
+// https://www.freecodecamp.org/news/get-started-with-css-in-5-minutes-e0804813fc3e/
+// https://learnxinyminutes.com/docs/sass/
+
+//  css 2 scss
+// https://beautifytools.com/css-to-scss-converter.php
+// https://css2sass.herokuapp.com/
+// https://jsonformatter.org/css-to-scss
+
+// css grid
+// https://css-grid-layout-generator.pw/
+// https://cssgrid-generator.netlify.app/
+
+html,
+body,
+#container {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+#settings {
+  height: fit-content;
+}
+
+#settings fieldset {
+  border: 1px solid #ddd;
+}
+
+#stateContainer > div + div,
+#matrixContainer > div + div {
+  margin-top: 6px;
+}
+
+#matrixContainer input {
+  // width: 145px;
+  width: 100px;
+}
+
+#canvasRoot {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-width: 500px;
+}
+
+#canvasContainer {
+  position: absolute;
+  display: inline-block;
+  height: 100%;
+}
+
+#buttonContainer {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.UinputContainer {
+  display: grid;
+  // width: 10em;
+  // height: 10em;
+  // grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, auto);
+  // grid-template-columns: repeat(5, min-content);
+  // grid-template-columns: repeat(5, fit-content(min-content));
+  // grid-template-columns: max-content min-content max-content max-content min-content;
+  // grid-template-columns: min-content max-content min-content min-content max-content;
+  grid-template-rows: repeat(4, 1fr);
+  // grid-gap: repeat(2, 2em);
+  grid-gap: 0.2em 0.2em;
+  // place-items: stretch stretch;
+  place-items: initial;
+  place-content: space-evenly space-evenly;
+}
+
+.Uin-pre {
+  grid-area: 2 / 1 / 4 / 2;
+}
+
+.Uin-bra,
+.Uin-ket {
+  // background-image: url('../assets/bracket.svg');
+  background-image: url('/assets/bracket.svg');
+  // background-size: contain;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 10px;
+  // min-width: 10px;
+
+  // font-family: 'Latin Modern Math';
+  // transform: scale(2, 4);
+  // // font-size: 2em;
+  // font-size: 100%;
+  // line-height: 2.7;
+  // display: inline-block;
+  // vertical-align: middle;
+}
+
+.Uin-bra {
+  grid-area: 1 / 2 / 5 / 3;
+}
+
+.Uin-ket {
+  grid-area: 1 / 5 / 5 / 6;
+  // background-image: url('/assets/bracket.svg');
+  // background-repeat: no-repeat;
+  // background-size: 100% 100%;
+  // width: 10px;
+  transform: rotate(180deg);
+}
+
+.Uin-00 {
+  grid-area: 1 / 3 / 3 / 4;
+}
+
+.Uin-01 {
+  grid-area: 1 / 4 / 3 / 5;
+}
+
+.Uin-10 {
+  grid-area: 3 / 3 / 5 / 4;
+}
+
+.Uin-11 {
+  grid-area: 3 / 4 / 5 / 5;
+}

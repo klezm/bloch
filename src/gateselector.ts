@@ -1,10 +1,10 @@
 import { ButtonSelector, OnClickCallback } from './buttonselector';
 
 export enum SelectedGate {
-  X = 'X',
-  Y = 'Y',
-  Z = 'Z',
-  H = 'H',
+  X = '$$X$$',
+  Y = '$$Y$$',
+  Z = '$$Z$$',
+  H = '$$H$$',
   Clear = 'Clear',
 }
 

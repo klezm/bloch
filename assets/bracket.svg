@@ -1,0 +1,36 @@
+<!-- https://danmarshall.github.io/google-font-to-svg-path/ -->
+<!-- https://www.w3schools.com/graphics/svg_text.asp -->
+
+
+<svg
+  width="106"
+  height="463"
+  xmlns="http://www.w3.org/2000/svg">
+  <g>
+  <path
+    d="m102,-6.5q-54,128.5 -54,266t53,254t149,197.5l10,-10q-140,-191 -140,-439q0,-127 36,-250.5t104,-216.5l-10,-10q-94,80 -148,208.5z"
+    fill="black"
+    transform="scale(0.5) translate(-48, 215)"/>
+  </g>
+</svg>
+
+<!-- <svg height="30" width="200"><text x="0" y="15" fill="red">(</text></svg> -->
+
+<!-- <svg width="21.201" height="92.6" viewBox="0 0 21.201 92.6" xmlns="http://www.w3.org/2000/svg"><g id="svgGroup" stroke-linecap="round" fill-rule="evenodd" font-size="9pt" stroke="#000" stroke-width="0.25mm" fill="black" style="stroke:#000;stroke-width:0.25mm;fill:black"><path d="M 20.201 0 L 21.201 1 Q 7.201 20.1 7.201 44.9 Q 7.201 57.6 10.801 69.95 Q 14.401 82.3 21.201 91.6 L 20.201 92.6 A 51.869 51.869 0 0 1 8.552 78.234 A 64.461 64.461 0 0 1 5.401 71.75 Q 0.001 58.9 0.001 45.15 A 62.391 62.391 0 0 1 2.86 26.087 A 57.385 57.385 0 0 1 5.301 19.75 Q 10.601 8.1 20.201 0 Z" vector-effect="non-scaling-stroke"/></g></svg> -->
+
+<!--
+<svg width="46" height="200" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="#000" id="svgGroup" stroke-linecap="round" fill-rule="evenodd" font-size="9pt" stroke-width="0.25mm" fill="black">
+   <path stroke="null" d="m43.631,0l2.159,2.16c-20.158,27.503 -30.236,59.107 -30.236,94.817c0,18.286 2.592,36.32 7.775,54.103c3.055,10.665 7.218,20.979 12.419,30.779c2.971,5.553 6.328,10.893 10.042,15.983l-2.159,2.158c-10.178,-8.74 -18.699,-19.237 -25.161,-30.993c-2.53,-4.549 -4.8,-9.236 -6.803,-14.039c-7.778,-18.502 -11.665,-37.653 -11.665,-57.452c-0.091,-13.951 1.987,-27.83 6.155,-41.144c1.492,-4.673 3.258,-9.252 5.292,-13.716c7.631,-16.774 18.358,-30.993 32.182,-42.656l0,0l0,0l0,0z" vector-effect="non-scaling-stroke"/>
+  </g>
+</svg>
+-->
+
+<!--
+<svg width="59" height="196" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <title>Layer 1</title>
+  <text transform="matrix(8.94647 0 0 8.94647 8.87839 -0.11161)" stroke="#000" xml:space="preserve" text-anchor="start" font-family="Noto Sans JP" font-size="24" id="svg_1" y="16.73141" x="-1.93417" stroke-width="0" fill="#000000">(</text>
+ </g>
+</svg>
+-->

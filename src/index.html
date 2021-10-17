@@ -3,60 +3,31 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- <script>
+      MathJax = {
+        tex: {
+          inlineMath: [
+            ['$', '$'],
+            // ['\\(', '\\)'],
+          ],
+        },
+        svg: { fontCache: 'global' },
+        startup: {
+          ready: () => {
+            console.log('MathJax is loaded, but not yet initialized');
+            MathJax.startup.defaultReady();
+            console.log(
+              'MathJax is initialized, and the initial typeset is queued'
+            );
+          },
+        },
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
+
     <title>Bloch sphere simulator</title>
-    <style>
-      html,
-      body,
-      #container {
-        height: 100%;
-      }
-
-      body {
-        margin: 0;
-        padding: 0;
-      }
-
-      #container {
-        display: flex;
-        flex-flow: row wrap;
-      }
-
-      #settings {
-        height: fit-content;
-      }
-
-      #settings fieldset {
-        border: 1px solid #ddd;
-      }
-
-      #stateContainer > div + div,
-      #matrixContainer > div + div {
-        margin-top: 6px;
-      }
-
-      #matrixContainer input {
-        width: 145px;
-      }
-
-      #canvasRoot {
-        flex: 1;
-        position: relative;
-        overflow: hidden;
-        min-width: 500px;
-      }
-
-      #canvasContainer {
-        position: absolute;
-        display: inline-block;
-        height: 100%;
-      }
-
-      #buttonContainer {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-      }
-    </style>
   </head>
   <body>
     <div id="container">
@@ -65,7 +36,7 @@
           <legend>Quantum state:</legend>
         </fieldset>
         <fieldset id="matrixContainer">
-          <legend>Enter a unitary matrix:</legend>
+          <legend>Enter a unitary matrix (Quantum Gate):</legend>
         </fieldset>
       </div>
       <div id="canvasRoot">

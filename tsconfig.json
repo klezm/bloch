@@ -6,7 +6,8 @@
     "moduleResolution": "node",
     "outDir": "./dist/",
     "sourceMap": true,
-    "noImplicitAny": true,
+    // TODO: un-uncomment
+    // "noImplicitAny": true,
     "module": "es6",
     "target": "es5"
   },
