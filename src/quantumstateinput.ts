@@ -189,7 +189,9 @@ export class QuantumStateInput {
     // theta = theta || this.amplitude[0].value;
     // phi = phi || parseFloat(this.phase.value);
     // <!-- <td> + exp(i${phi}π)</td> -->
-    let ex = exp(prod(complex(0, 1), parseFloat(phi), pi));
+    let ex = exp(prod(complex(0, 1), parseFloat(phi), pi)) as unknown as math.Complex;
+    let sinT = sin((theta * pi) / 2);
+    let ket1Scalar = round(multiply(ex as math.MathType,sinT as math.MathType) as math.Complex, 2);
     //(ex as unknown as math.Complex).re = 0;
     this.qubitFormula.innerHTML = `
       \\begin{alignat}{3}
@@ -213,12 +215,16 @@ export class QuantumStateInput {
         precision: 2,
       })}
       && \\large ${ketStr('0', false)}
-      %&& \\large + && \\large ${round(sin((theta * pi) / 2), 4)} %\\cdot
-      && \\large + && \\large ${format(sin((theta * pi) / 2), {
+      %&& \\large + && \\large ${round(ket1Scalar.re, 4)} %\\cdot
+      && \\large + && (\\large ${format(ket1Scalar.re, {
         notation: 'fixed',
         precision: 2,
       })} %\\cdot
-      && \\large  \\:( ${extendedComplexString(round(ex, 2) as unknown as math.Complex)} )
+      % && \\large  \\: ${(ket1Scalar.im >= 0?'+ ':'')+round(ket1Scalar.im, 4)}
+      && \\large  \\: ${(ket1Scalar.im >= 0?'+ ':'')+format(ket1Scalar.im,{
+        notation: 'fixed',
+        precision: 2
+      })+'i'} )
       && \\large ${ketStr('1', false)}
       \\end{alignat}
       `;
