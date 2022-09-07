@@ -1,6 +1,6 @@
 import { acos, asin, cos, pi, sin, exp, complex, prod, round, format, multiply } from 'mathjs';
 import * as math from 'mathjs';
-import { ketStr } from './utils';
+import { extendedComplexString, ketStr } from './utils';
 // import { mathjax } from 'mathjax-full/js/mathjax';
 // import { MathJax } from 'mathjax-full/js/components/global';
 // import { MathJax } from 'mathjax-full/js/mathjax';
@@ -190,7 +190,7 @@ export class QuantumStateInput {
     // phi = phi || parseFloat(this.phase.value);
     // <!-- <td> + exp(i${phi}π)</td> -->
     let ex = exp(prod(complex(0, 1), parseFloat(phi), pi));
-    (ex as unknown as math.Complex).re = 0;
+    //(ex as unknown as math.Complex).re = 0;
     this.qubitFormula.innerHTML = `
       \\begin{alignat}{3}
       \\large  |ψ⟩
@@ -218,7 +218,7 @@ export class QuantumStateInput {
         notation: 'fixed',
         precision: 2,
       })} %\\cdot
-      && \\large \\: ${round(ex, 2).toString()}
+      && \\large  \\:( ${extendedComplexString(round(ex, 2) as unknown as math.Complex)} )
       && \\large ${ketStr('1', false)}
       \\end{alignat}
       `;

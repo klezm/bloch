@@ -23,7 +23,7 @@ import {
   TubeGeometry,
   Vector3,
 } from 'three';
-import { cos, equal, sin } from 'mathjs';
+import { Complex, cos, equal, sin } from 'mathjs';
 
 type Map<T> = { [key: string]: T };
 export type IntersectionMap = Map<Intersection<Object3D>>;
@@ -213,4 +213,43 @@ export function linSpace(startValue, stopValue, cardinality) {
     arr.push(startValue + step * i);
   }
   return arr;
+}
+
+export function extendedComplexString(complex: Complex) : string {
+  var re = complex['re'];
+  var im = complex['im'];
+  var ret = "";
+
+  if (complex['isNaN']()) {
+    return 'NaN';
+  }
+
+  if (complex['isInfinite']()) {
+    return 'Infinity';
+  }
+
+  if (Math.abs(re) < complex['EPSILON']) {
+    re = 0;
+  }
+
+  if (Math.abs(im) < complex['EPSILON']) {
+    im = 0;
+  }
+  if (re < 0) {
+    re = -re;
+    ret += "-";
+  } else {
+    ret += "+";
+  }
+  ret += re.toFixed(2);
+  ret += " ";
+  if (im < 0) {
+    im = -im;
+    ret += "-";
+  } else {
+    ret += "+";
+  }
+  ret += " ";
+  ret += im.toFixed(2);
+  return ret + "i";
 }
