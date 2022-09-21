@@ -15,7 +15,7 @@ The project uses Node.js for its build. At the time of writing, the project was 
 3. Run `npm run start`
 
 or simply `npm install; npm run start`
-or `ncu; npm install; npm run start` (for checking latest packages as well)
+or `npx npm-check-updates -i; npm install; npm run start` (for checking latest packages as well)
 
 # Dev
 

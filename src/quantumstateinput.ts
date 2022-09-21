@@ -1,6 +1,6 @@
 import { acos, asin, cos, pi, sin, exp, complex, prod, round, format, multiply } from 'mathjs';
 import * as math from 'mathjs';
-import { ketStr } from './utils';
+import { Ket } from './utils';
 // import { mathjax } from 'mathjax-full/js/mathjax';
 // import { MathJax } from 'mathjax-full/js/components/global';
 // import { MathJax } from 'mathjax-full/js/mathjax';
@@ -189,37 +189,52 @@ export class QuantumStateInput {
     // theta = theta || this.amplitude[0].value;
     // phi = phi || parseFloat(this.phase.value);
     // <!-- <td> + exp(i${phi}π)</td> -->
-    let ex = exp(prod(complex(0, 1), parseFloat(phi), pi));
-    (ex as unknown as math.Complex).re = 0;
-    this.qubitFormula.innerHTML = `
+
+    // let ex = exp(prod(complex(0, 1), parseFloat(phi), pi)) as unknown as math.Complex;
+    // ex.re = 0;
+    const cosT = cos((theta * pi) / 2); // === this.getStateVec()[0]
+    const sinT = sin((theta * pi) / 2);
+    const ket1 = this.getStateVec()[1] as unknown as math.Complex;
+    this.qubitFormula.innerHTML =
+      `
       \\begin{alignat}{3}
-      \\large  |ψ⟩
-      & \\large = & \\large  cos \\left ( \\frac{\\color{SkyBlue}\\theta}{2} \\right )
-      && \\large |0⟩
-      && \\large + && \\large sin \\left ( \\frac{\\color{SkyBlue}\\theta}{2} \\right )
-      && \\large \\qquad \\quad
-      e^{i \\color{Fuchsia} \\phi}
-      && \\large |1⟩ \\\\
+        \\large  |ψ⟩
+        & \\large = & \\large  cos \\left ( \\frac{\\color{SkyBlue}\\theta}{2} \\right )
+        && \\large |0⟩
+        && \\large + && \\large sin \\left ( \\frac{\\color{SkyBlue}\\theta}{2} \\right )
+        && \\large \\qquad \\quad e^{i {\\color{Fuchsia} \\phi}}
+        && \\large ${Ket.one} \\\\
 
-      & \\large = & \\: \\large cos \\left ( \\frac{{\\color{SkyBlue}${theta}π}}{2} \\right )
-      && \\large ${ketStr('0', false)}
-      && \\large + && \\large sin \\left ( \\frac{{\\color{SkyBlue}${theta}π}}{2} \\right )
-      && \\large \\: e^{i {\\color{Fuchsia} ${phi}π}}
-      && \\large ${ketStr('1', false)} \\\\
-
-      %& \\large = & \\large ${round(cos((theta * pi) / 2), 4)}
-      & \\large = & \\large ${format(cos((theta * pi) / 2), {
-        notation: 'fixed',
-        precision: 2,
-      })}
-      && \\large ${ketStr('0', false)}
-      %&& \\large + && \\large ${round(sin((theta * pi) / 2), 4)} %\\cdot
-      && \\large + && \\large ${format(sin((theta * pi) / 2), {
-        notation: 'fixed',
-        precision: 2,
-      })} %\\cdot
-      && \\large \\: ${round(ex, 2).toString()}
-      && \\large ${ketStr('1', false)}
+        & \\large = & \\: \\large \\underbrace{
+          cos \\left ( \\frac{{\\color{SkyBlue}${theta}π}}{2} \\right )
+        }_{${format(cosT, { notation: 'fixed', precision: 4 })}}
+        && \\large ${Ket.zero}
+        && \\large + && \\large \\underbrace{
+          sin \\left ( \\frac{{\\color{SkyBlue}${theta}π}}{2} \\right )
+        }_{${format(sinT, { notation: 'fixed', precision: 4 })}}
+        && \\large \\: e^{i {\\color{Fuchsia} ${phi}π}}
+        && \\large ${Ket.one} \\\\
+        ` +
+      // `
+      // %& \\large = & \\large ${round(cosT, 4)}
+      // & \\large = & \\large ${format(cosT, {notation: 'fixed', precision: 2})}
+      // && \\large ${Ket.zero}
+      // %&& \\large + && \\large ${round(sinT, 4)} %\\cdot
+      // && \\large + && \\large ${format(sinT, {notation: 'fixed', precision: 2})} %\\cdot
+      // %&& \\large \\: ${round(ex, 2).toString()}
+      // && \\large \\: e^{i {\\color{Fuchsia} ${phi}π}}
+      // && \\large ${Ket.one} \\\\
+      // `
+      // +
+      `
+        & \\large = & \\large ${format(cosT, {
+          notation: 'fixed',
+          precision: 2,
+        })}
+        && \\large ${Ket.zero}
+        && \\large + &&
+        && \\large \\llap{(${math.round(ket1, 2).toString()})}
+        && \\large ${Ket.one}
       \\end{alignat}
       `;
     this.qubitFormulaHTML.render().reset();

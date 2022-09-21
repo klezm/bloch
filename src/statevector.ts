@@ -43,10 +43,10 @@ export class StateVector {
   constructor(textLayer: Object3D, captureZones: CaptureZone[]) {
     this.container = new Object3D();
 
-    this.phiLabel = createText('Φ', { renderOrder: -1 });
+    this.phiLabel = createText('ϕ', { renderOrder: -1, fillStyle: 'Fuchsia' });
     this.container.add(this.phiLabel);
 
-    this.thetaLabel = createText('θ', { renderOrder: -1 });
+    this.thetaLabel = createText('θ', { renderOrder: -1, fillStyle: 'SkyBlue' });
     this.container.add(this.thetaLabel);
 
     this._stateVector = new Vector3(0, 0, 1);
@@ -112,14 +112,14 @@ export class StateVector {
     };
 
     this.thetaArc = removeCreateAdd(this.thetaArc, () => {
-      const arc = createArc(theta, HELPER_RADIUS);
+      const arc = createArc(theta, HELPER_RADIUS, 'SkyBlue');
       arc.rotateY(-pi / 2);
       arc.rotateX(phi - pi / 2);
       return arc;
     });
 
     const projectedRadius = HELPER_RADIUS * cos(Math.max(pi / 2 - theta, 0));
-    this.phiArc = removeCreateAdd(this.phiArc, () => createArc(phi, projectedRadius));
+    this.phiArc = removeCreateAdd(this.phiArc, () => createArc(phi, projectedRadius, 'Fuchsia'));
 
     this.phiLine = removeCreateAdd(this.phiLine, () => {
       const line = makaeDashedLine(new Vector3(projectedRadius, 0, 0));

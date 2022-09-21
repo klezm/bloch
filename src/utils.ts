@@ -124,7 +124,7 @@ export function createSphere(): Mesh {
   return new Mesh(geometry, material);
 }
 
-export function createArc(radians: number, radius: number, color: number = 0xffffff): Line {
+export function createArc(radians: number, radius: number, color: number | string = 0xffffff): Line {
   const curve = new EllipseCurve(
     0,
     0, // ax, aY
@@ -150,6 +150,8 @@ export function createText(
     renderOrder?: number;
     width?: number;
     height?: number;
+    fillStyle?: string;
+    strokeStyle?: string;
   } = {}
 ): Mesh {
   const TEXT_SIZE = 0.15;
@@ -163,9 +165,9 @@ export function createText(
   bitmap.height = (60 * options.height) / TEXT_SIZE;
   g.font = 'Bold 40px Arial';
 
-  g.fillStyle = 'white';
+  g.fillStyle = options.fillStyle ?? 'white';
   g.fillText(text, 0, 40);
-  g.strokeStyle = 'black';
+  g.strokeStyle = options.strokeStyle ?? 'black';
   g.strokeText(text, 0, 40);
 
   // canvas contents will be used for a texture
@@ -196,6 +198,13 @@ export function ketStr(val: any, dollars: boolean = true) {
     val = '$$' + val + '$$';
   }
   return val;
+}
+
+export enum Ket {
+  zero = ketStr('0', false),
+  $0$ = ketStr('0', true),
+  one = ketStr('1', false),
+  $1$ = ketStr('1', true),
 }
 
 /**
