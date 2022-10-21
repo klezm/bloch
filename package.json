@@ -42,7 +42,6 @@
   },
   "optionalDependencies": {},
   "dependencies": {
-    "@types/mathjs": "^9.4.1",
     "@types/three": "^0.144.0",
     "mathjax": "^3.2.2",
     "mathjax-full": "^3.2.2",

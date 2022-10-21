@@ -57,4 +57,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
   },
+  stats: {
+    errorDetails: true,
+    // errorStack: true,
+  },
 };
