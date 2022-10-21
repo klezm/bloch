@@ -8,6 +8,12 @@
             "type": "shell",
             // "command": "npx npm-check-updates -u"
             "command": "npx npm-check-updates -i"
+        },
+        {
+            "label": "ncu & start",
+            "type": "shell",
+            "dependsOn": ["npm-check-updates"],
+            "command": "npm run start"
         }
     ]
 }

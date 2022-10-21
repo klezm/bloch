@@ -18,7 +18,12 @@
 		"vscode": {
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
-				"dbaeumer.vscode-eslint"
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"christian-kohler.path-intellisense",
+				"rbbit.typescript-hero",
+				"pmneo.tsimporter",
+				"stringham.move-ts"
 			]
 		}
 	},

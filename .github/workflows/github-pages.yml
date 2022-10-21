@@ -11,17 +11,12 @@ jobs:
 
       - name: Install and Build 🔧
         run: |
-          npm i -g npm-check-updates
-          ncu
           npm install
+          # npm i -g npm-check-updates
+          # ncu
+          # npx npm-check-updates -u
+          npm audit fix --force
           npm run build-gh-pages
-
-      - name: npm-check-updates
-        run: |
-          ncu
-
-      - name: npm-check-updates2
-        run: ncu
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.5
