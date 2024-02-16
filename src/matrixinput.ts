@@ -83,6 +83,10 @@ export class MatrixInput {
   }
 
   getMatrix(): Matrix2x2 | null {
+    // if (this.uScalar.value === null) return null;
+    // if ([this.uScalar.value, this.u00.value, this.u01.value, this.u10.value, this.u11.value].includes(null)) return null;
+    if ([this.uScalar.value, this.u00.value, this.u01.value, this.u10.value, this.u11.value].every((e) => e === '')) return null;
+
     const scalar = evaluate(this.uScalar.value || '1'); // if scalar is empty multiply with 1
     const matrix = [
       // [evaluate(this.u00.value) * scalar, evaluate(this.u01.value) * scalar],
@@ -91,7 +95,8 @@ export class MatrixInput {
       [evaluate(this.u10.value + ' * ' + scalar), evaluate(this.u11.value + ' * ' + scalar)],
     ];
 
-    if (matrix.flat().find((item) => item === null) === null) return null;
+    // if (matrix.flat().find((item) => item === null) === null) return null;
+    // if (matrix.flat().every((e) => e === '')) return null;
 
     return matrix as Matrix2x2;
   }
@@ -104,7 +109,12 @@ export class MatrixInput {
     // let texField = this.container.querySelector('#qubitGateOpFormula');
     // const gate = math.format(this.getMatrix(), { notation: 'fixed', precision: 2 });
     // const gate = math.round(this.getMatrix(), 2);
-    const gate = math.round(this.getMatrix(), 2) as math.MathArray;
+    const matrix = this.getMatrix();
+    if (matrix === null) {
+      this.texField.innerHTML = '';
+      return;
+    }
+    const gate = math.round(matrix, 2) as math.MathArray;
     // console.log('gate:        ', gate);
     // console.log('stateMatrix: ', stateMatrix);
     // console.log(typeof gate, math.typeOf(gate));

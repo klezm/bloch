@@ -1,7 +1,9 @@
 {
-    "recommendations": [
-        "eamodio.gitlens",
-        "github.copilot",
-        "GitHub.copilot-labs"
-    ]
+  "recommendations": [
+    "eamodio.gitlens",
+    "github.copilot",
+    "GitHub.copilot-labs",
+    "oxc.oxc-vscode",
+    "denoland.vscode-deno"
+  ]
 }
