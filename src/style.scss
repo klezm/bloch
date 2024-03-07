@@ -40,6 +40,11 @@ body {
   margin-top: 6px;
 }
 
+button > mjx-container {
+  margin-top: unset !important;
+  margin-bottom: unset !important;
+}
+
 #matrixContainer input {
   // width: 145px;
   width: 100px;

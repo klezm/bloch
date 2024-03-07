@@ -1,10 +1,11 @@
 import { makeBloch, QuantumStateChangeCallback } from './bloch';
 import { calculateOriantation, Matrix2x2 } from './eigen';
-import { GateSelector, SelectedGate } from './gateselector';
+import { gate2Matrix, GateSelector, SelectedGate } from './gateselector';
 import { SelectedState, StateSelector } from './stateselector';
 import { MatrixInput } from './matrixinput';
 import { QuantumStateInput } from './quantumstateinput';
-import { min, pi } from 'mathjs';
+import { parse2DMatrix } from './utils';
+import { isArray, min, pi } from 'mathjs';
 
 // calculate mouse position in normalized device coordinates
 // (-1 to +1) for both components
@@ -149,26 +150,57 @@ export function init(
     qubitGateOpFormula();
   });
 
+  new GateSelector(matrixContainer, (option: string, onlyMatrix: boolean = false) => {
+    // const optionToMatrix: {
+    //   [key: string]: [string, [string, string], [string, string]];
+    //   // [key: string]: [string, [string, string], [string, string]] | string[];
+    //   // [key: string]: [string, string];
+    //   // [key: string]: string[];
+    //   // [key: string]: any[];
+    // } = {
+    //   [SelectedGate.X]: ['', ...parse2DMatrix('0 1 \\ 1 0')], // NOT, Bit-Flip
+    //   [SelectedGate.Y]: ['', ...parse2DMatrix('0 -i \\ i 0')],
+    //   [SelectedGate.Z]: ['', ...parse2DMatrix('1 0 \\ 0 -1')], // = T^4 Phase-Flip
+    //   [SelectedGate.H]: ['sqrt(1/2)', ...parse2DMatrix('1 1 \\ 1 -1')], // Hadamard
+
+    //   [SelectedGate.RX]: ['sqrt(1/2)', ...parse2DMatrix('1 -i \\ -i 1')], // θ=π/2 = exp(-i(θ/2)X)
+    //   [SelectedGate.RY]: ['sqrt(1/2)', ...parse2DMatrix('1 -1 \\ 1 1')], // θ=π/2 = exp(-i(θ/2)Y)
+    //   // [SelectedGate.RXdg]: ['sqrt(1/2)', ...parse2DMatrix('1 i \\ i 1')],
+    //   // [SelectedGate.RYdg]: ['sqrt(1/2)', ...parse2DMatrix('1 1 \\ -1 1')],
+
+    //   [SelectedGate.SX]: ['sqrt(1/2)', ...parse2DMatrix('1+i 1-i \\ 1-i 1+i')], // Sqrt of X
+    //   // [SelectedGate.SXdg]: ['sqrt(1/2)', ...parse2DMatrix('1-i 1+i \\ 1+i 1-i')],
+    //   // [SelectedGate.T]: ['', ...parse2DMatrix('1 0 \\ 0 exp(i*pi/4)')], // pi/8 // Equivalent to a π/4 radian rotation about the Z axis.
+    //   // [SelectedGate.Tdg]: ['', ...parse2DMatrix('1 0 \\ 0 exp(-i*pi/4)')], // Equivalent to a -π/4 radian rotation about the Z axis.
+    //   [SelectedGate.S]: ['', ...parse2DMatrix('1 0 \\ 0 i')], // = T^2 Phase // Equivalent to π/2 radian rotation about the Z axis.
+    //   // [SelectedGate.Sdg]: ['', ...parse2DMatrix('1 0 \\ 0 -i')], // Singleton // Equivalent to -π/2 radian rotation about the Z axis.
+
+    //   // [SelectedGate.P]: ['', ...parse2DMatrix('1 0 \\ 0 exp(i*λ)')], // λ=π=>Z λ=π/2=>S λ=π/4=>T Phase-Shift
+    //   // [SelectedGate.I]: ['', ...parse2DMatrix('1 0 \\ 0 1')], // Identity
+
+    //   [SelectedGate.Clear]: ['', ['', ''], ['', '']],
+    // };
+    // // const optionToMatrix: {
+    // //   [key: string]: [string, [string, string], [string, string]];
+    // // } = Object.fromEntries(Object.entries(optionToMatrix_).map(([key, value]) => {
+    // //     if (isArray(value[1])) {return [key, value as [string, [string, string], [string, string]]];}
+    // //     return [key, [value[0], ...parse2DMatrix(value[1])]];
+    // //   }));
+    const optionToMatrix = gate2Matrix;
+
+    if (onlyMatrix) {
+      return optionToMatrix[option];
+    }
+
+    matrixInput.setMatrix(optionToMatrix[option]);
+    setMatrixOnBloch(matrixInput.getMatrix());
+  });
   const matrixInput = new MatrixInput(matrixContainer, (matrix: Matrix2x2) =>
     setMatrixOnBloch(matrix)
   );
-  new GateSelector(matrixContainer, (option: string) => {
-    const optionToMatrix: {
-      [key: string]: [string, [string, string], [string, string]];
-    } = {
-      [SelectedGate.X]: ['', ['0', '1'], ['1', '0']],
-      [SelectedGate.Y]: ['', ['0', '-i'], ['i', '0']],
-      [SelectedGate.Z]: ['', ['1', '0'], ['0', '-1']],
-      [SelectedGate.H]: ['sqrt(1/2)', ['1', '1'], ['1', '-1']],
-      [SelectedGate.Clear]: ['', ['', ''], ['', '']],
-    };
-    matrixInput.setMatrix(optionToMatrix[option]);
-    setMatrixOnBloch(matrixInput.getMatrix());
-    // TODO: trigger Gate * qubit multiplication
-    qubitGateOpFormula();
-  });
 
   const setMatrixOnBloch = (matrix: Matrix2x2 | null) => {
+    qubitGateOpFormula();
     if (matrix === null) {
       bloch.hideRotationAxis();
       return;

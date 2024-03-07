@@ -1,12 +1,13 @@
-export type Options<T> = { key: T; value: string }[];
-export type OnClickCallback = (option: string) => void;
+export type Options<T> = { key: T; value?: string; tooltip?: string }[];
+export type OnClickCallback = (option: string, onlyMatrix?: boolean) => void | any;
 
-function createHTML<T>(keyValues: { key: T; value: string }[]) {
+function createHTML<T>(keyValues: Options<T>) {
   let result = '';
   for (let i = 0; i < keyValues.length; i++) {
     const key = keyValues[i].key;
-    const value = keyValues[i].value;
-    result += `<button name="${key}">${value}</button>`;
+    const value = keyValues[i].value || keyValues[i].key;
+    const tooltip = keyValues[i].tooltip || '';
+    result += `<button name="${key}" title="${tooltip}">${value}</button>`;
   }
   return result;
 }

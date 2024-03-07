@@ -8,6 +8,7 @@ import { SVG } from 'mathjax-full/js/output/svg';
 import { AllPackages } from 'mathjax-full/js/input/tex/AllPackages';
 import { browserAdaptor } from 'mathjax-full/js/adaptors/browserAdaptor';
 import { RegisterHTMLHandler } from 'mathjax-full/js/handlers/html';
+import { Matrix2Latex } from './utils';
 RegisterHTMLHandler(browserAdaptor());
 
 type OnChangeCallback = (matrix: Matrix2x2) => void;
@@ -50,6 +51,33 @@ export class MatrixInput {
 
     [this.uScalar, this.u00, this.u01, this.u10, this.u11].forEach((input) => {
       input.addEventListener('change', this.onInputChange); // TODO: cleanup
+      // // Add arrow key support for quantum gate input
+      // input.addEventListener('keydown', function (event) {
+      //   let isComplex = this.value.includes('i');
+      //   let number = parseFloat(this.value.replace('i', ''));
+
+      //   switch (event.key) {
+      //     case 'ArrowUp':
+      //       number += 0.1;
+      //       if (number > 1 || number < -1) {
+      //         number = number - 0.1;
+      //         isComplex = !isComplex;
+      //       }
+      //       this.value = `${number.toFixed(1)}${isComplex ? 'i' : ''}`;
+      //       event.preventDefault();
+      //       break;
+      //     case 'ArrowDown':
+      //       number -= 0.1;
+      //       if (number > 1 || number < -1) {
+      //         number = number + 0.1;
+      //         isComplex = !isComplex;
+      //       }
+      //       this.value = `${number.toFixed(1)}${isComplex ? 'i' : ''}`;
+      //       event.preventDefault();
+      //       break;
+      //   }
+      //   this.dispatchEvent(new Event('change'));
+      // });
     });
 
     // this.texField = this.container.querySelector(`[id="qubitGateOpFormula"]`);
@@ -82,12 +110,12 @@ export class MatrixInput {
     this.u11.value = matrix[2][1];
   }
 
-  getMatrix(): Matrix2x2 | null {
+  getMatrix(withoutScalar: boolean = false): Matrix2x2 | null {
     // if (this.uScalar.value === null) return null;
     // if ([this.uScalar.value, this.u00.value, this.u01.value, this.u10.value, this.u11.value].includes(null)) return null;
     if ([this.uScalar.value, this.u00.value, this.u01.value, this.u10.value, this.u11.value].every((e) => e === '')) return null;
 
-    const scalar = evaluate(this.uScalar.value || '1'); // if scalar is empty multiply with 1
+    const scalar = withoutScalar ? 1 : evaluate(this.uScalar.value || '1'); // if scalar is empty multiply with 1
     const matrix = [
       // [evaluate(this.u00.value) * scalar, evaluate(this.u01.value) * scalar],
       // [evaluate(this.u10.value) * scalar, evaluate(this.u11.value) * scalar],
@@ -125,28 +153,13 @@ export class MatrixInput {
     // this.texField.innerHTML = String(res);
     this.texField.innerHTML = `
     $$
-    \\left (
-    \\begin{matrix}
-      ${gate[0][0].toString()} & ${gate[0][1].toString()} \\\\
-      ${gate[1][0].toString()} & ${gate[1][1].toString()}
-    \\end{matrix}
-    \\right )
+    ${Matrix2Latex(this.getMatrix(true), this.uScalar.value, false)}
 
-    \\left (
-    \\begin{matrix}
-      ${math.round(stateMatrix[0], 2).toString()} \\\\
-      ${math.round(stateMatrix[1], 2).toString()}
-    \\end{matrix}
-    \\right )
+    ${Matrix2Latex(math.round(math.transpose([stateMatrix]), 2), undefined, false)}
 
     =
 
-    \\left (
-    \\begin{matrix}
-      ${math.round(res[0], 2).toString()} \\\\
-      ${math.round(res[1], 2).toString()}
-    \\end{matrix}
-    \\right )
+    ${Matrix2Latex(math.round(math.transpose([res as number[]]), 2), undefined, false)}
     $$
     `;
     this.GateQubitFormulaHTML.render().reset();

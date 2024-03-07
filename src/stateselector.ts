@@ -22,28 +22,28 @@ export class StateSelector extends ButtonSelector<SelectedState> {
         key: SelectedState.state0,
         // value: '|0⟩',
         // value: '$$\\left | 0 \\right \\rangle$$',
-        value: ketStr('0'),
+        value: ketStr('0', true, [1, 0]),
       },
       {
         key: SelectedState.state1,
         // value: '|1⟩',
-        value: ketStr('1'),
+        value: ketStr('1', true, [0, 1]),
       },
       {
         key: SelectedState.statePlus,
-        value: ketStr('+'),
+        value: ketStr('+', true, '\\frac{1}{\\sqrt{2}} \\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix}'),
       },
       {
         key: SelectedState.stateMinus,
-        value: ketStr('-'),
+        value: ketStr('-', true, '\\frac{1}{\\sqrt{2}} \\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix}'),
       },
       {
         key: SelectedState.stateI,
-        value: ketStr('i'),
+        value: ketStr('i', true, '\\frac{1}{\\sqrt{2}} \\begin{bmatrix} 1 \\\\ i \\end{bmatrix}'),
       },
       {
         key: SelectedState.stateMinusI,
-        value: ketStr('-i'),
+        value: ketStr('-i', true, '\\frac{1}{\\sqrt{2}} \\begin{bmatrix} 1 \\\\ -i \\end{bmatrix}'),
       },
     ]);
   }

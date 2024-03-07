@@ -23,6 +23,7 @@ import {
   TubeGeometry,
   Vector3,
 } from 'three';
+import * as math from 'mathjs';
 import { cos, equal, sin } from 'mathjs';
 
 type Map<T> = { [key: string]: T };
@@ -192,8 +193,16 @@ export function createText(
  * @param dollars
  * @returns
  */
-export function ketStr(val: any, dollars: boolean = true) {
+export function ketStr(val: any, dollars: boolean = true, mathtip: number[] | string | boolean = false) {
   val = '\\left | ' + String(val) + ' \\right \\rangle';
+  if (mathtip) {
+    // \\texttip
+    val = `\\mathtip{
+      ${val}
+    }{
+      ${Array.isArray(mathtip) ? `\\begin{bmatrix} ${mathtip.join(' \\\\ ')} \\end{bmatrix}` : mathtip}
+    }`;
+  }
   if (dollars) {
     val = '$$' + val + '$$';
   }
@@ -205,6 +214,76 @@ export enum Ket {
   $0$ = ketStr('0', true),
   one = ketStr('1', false),
   $1$ = ketStr('1', true),
+}
+
+/**
+ *
+ * @param matrix A Matrix as a string. Columns are space separated and rows are separated by '\\'.
+ * @returns
+ */
+export function parseMatrix(matrix: string): string[][] {
+  let mx = matrix.split('\\').map((row) => row.trim().split(' '));
+  // let mxMath = mx.map((el) => {
+  //   console.log(el, 'el');
+  //   return el.map((e) => {
+  //     console.log('e', e);
+  //     return math.parse(e);
+  //   });
+  //   return math.parse(el);
+  // });
+  // console.log(matrix, 'mxMath', mxMath);
+  // return mxMath;
+  return mx;
+}
+export function parse2DMatrix(matrix: string): [[string, string], [string, string]] {
+  return parseMatrix(matrix) as [[string, string], [string, string]];
+}
+
+export function Matrix2Latex(matrix: math.MathArray | math.Matrix, scalar?: string, dollars: boolean = true): string {
+  if (matrix === null) return '';
+
+  // const gate = math.round(matrix, 2) as math.MathArray;
+  const gate = math.matrix(math.round(matrix, 2));
+  // ${gate[0][0].toString()} & ${gate[0][1].toString()} \\\\
+  // ${gate[1][0].toString()} & ${gate[1][1].toString()}
+  let tex = `
+    \\left (
+    \\begin{matrix}
+      ${(() => {
+        let res = gate.map((value, index, matrix) => {
+          // console.log(value, 'index:', index, matrix, 'size:', math.size(matrix), math.size(matrix)[1], matrix.size(), matrix.size()[1]);
+          let el = `${value}`;
+          if (!(index[0] === matrix.size()[0] - 1 && index[1] === matrix.size()[1] - 1)) {
+            if (index[1] === matrix.size()[1] - 1) {
+              el += ' \\\\';
+            } else if (index[1] < matrix.size()[1]) {
+              el = el + ' &';
+            }
+          }
+          return el;
+        });
+        // console.log(res, math.typeOf(res));
+        // res = res.toArray()
+        // res = math.concat(math.matrix(res));
+        res = math.flatten(res);
+        // console.log('res', math.typeOf(res), res);
+        // let res2 = math.concat(...res.toArray());
+        const res2 = res.toArray().join(' ');
+        // console.log('res2', math.typeOf(res2), res2);
+        // res = math.squeeze(res)
+        return res2;
+      })()}
+    \\end{matrix}
+    \\right )
+    `;
+  // ${math.apply(gate, 0, )}
+  if (scalar) {
+    tex = `${math.parse(scalar).toTex()} ${tex}`;
+  }
+  if (dollars) {
+    tex = '$$' + tex + '$$';
+  }
+  return tex;
 }
 
 /**
